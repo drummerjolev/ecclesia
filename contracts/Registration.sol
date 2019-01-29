@@ -1,14 +1,23 @@
 pragma solidity >=0.4.25 <0.6.0;
 
 contract Registration {
+  // stores IPFS hashes
+  // see: https://bit.ly/2SbuouC
+  struct Multihash {
+    bytes32 digest;
+    uint8 hashFunction;
+    uint8 size;
+  }
+
+  address public electionAuthority;
+
   uint256 public openingTime;
   uint256 public closingTime;
 
-  // TODO: add rest of the parameters G, p, n
-  // TODO: Make struct for EC?
-  // TODO: add getters, see example for ellipticCurve below
   string public ellipticCurve;
   string public hashFunction;
+
+  Multihash public votersHash;
 
   constructor (
     uint256 openingTime_,
@@ -28,15 +37,16 @@ contract Registration {
       "Closing Time must be after Opening Time."
     );
 
-    // EA will have a public Ethereum address.
+    // EA's Ethereum address is broadcast
+    electionAuthority = msg.sender;
+
     // The caveat is that we have to expect voters to trust that address.
     // This risk is ongoing throughout the election - the address could get
     // compromised at any time.
     openingTime = openingTime_;
     closingTime = closingTime_;
 
-    // We assume we always use the Schnorr Signature scheme. RSA?
-    // The EA deploys the elliptic curve, G, p, n. Picks a hash function.
+    // The EA deploys the elliptic curve and picks a hash function.
     // Use NIST specifications.
     ellipticCurve = ellipticCurve_;
     hashFunction = hashFunction_;
@@ -48,7 +58,30 @@ contract Registration {
     return block.timestamp >= openingTime && block.timestamp <= closingTime;
   }
 
+  // TODO ...
+  /* function getTimeLeft() public view returns (uint256) {
+    return ...
+  } */
+
+  // getter for the hash function
+  function getHashFunction() public view returns (string memory) {
+    return hashFunction;
+  }
+
+  // getter for the elliptic curve
   function getEllipticCurve() public view returns (string memory) {
     return ellipticCurve;
+  }
+
+  // setter for the voter hash
+  // can only set once.
+  function setVotersHash(
+    bytes32 _digest,
+    uint8 _hashFunction,
+    uint8 _size
+  ) public {
+    if (votersHash.size == 0 && msg.sender == electionAuthority) {
+      votersHash = Multihash(_digest, _hashFunction, _size);
+    }
   }
 }
