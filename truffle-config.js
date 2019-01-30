@@ -75,6 +75,12 @@ module.exports = {
       // network_id: 2111,   // This network is yours, in the cloud.
       // production: true    // Treats this network as if it was a public net. (default: false)
     // }
+
+    develop: {
+      accounts: 5,
+      defaultEtherBalance: 300,
+      blockTime: 3
+    }
   },
 
   // Set default mocha options here, use special reporters etc.
@@ -87,7 +93,7 @@ module.exports = {
     solc: {
       optimizer: {
         enabled: true,
-        runs: 200
+        runs: 1000
       }
       // version: "0.5.1",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
