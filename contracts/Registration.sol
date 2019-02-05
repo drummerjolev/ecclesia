@@ -80,8 +80,9 @@ contract Registration {
     uint8 _hashFunction,
     uint8 _size
   ) public {
-    if (votersHash.size == 0 && msg.sender == electionAuthority) {
-      votersHash = Multihash(_digest, _hashFunction, _size);
-    }
+    // does NOT require the phase to be open. Could be submitted once the
+    // closing time is reached.
+    require(votersHash.size == 0 && msg.sender == electionAuthority);
+    votersHash = Multihash(_digest, _hashFunction, _size);
   }
 }
