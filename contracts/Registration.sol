@@ -1,14 +1,8 @@
 pragma solidity >=0.4.25 <0.6.0;
 
-contract Registration {
-  // stores IPFS hashes
-  // see: https://bit.ly/2SbuouC
-  struct Multihash {
-    bytes32 digest;
-    uint8 hashFunction;
-    uint8 size;
-  }
+import {IPFS} from './IPFS.sol';
 
+contract Registration {
   address public electionAuthority;
 
   uint256 public openingTime;
@@ -17,7 +11,7 @@ contract Registration {
   string public ellipticCurve;
   string public hashFunction;
 
-  Multihash public votersHash;
+  IPFS.Multihash public votersHash;
 
   constructor (
     uint256 openingTime_,
@@ -83,6 +77,6 @@ contract Registration {
     // does NOT require the phase to be open. Could be submitted once the
     // closing time is reached.
     require(votersHash.size == 0 && msg.sender == electionAuthority);
-    votersHash = Multihash(_digest, _hashFunction, _size);
+    votersHash = IPFS.Multihash(_digest, _hashFunction, _size);
   }
 }

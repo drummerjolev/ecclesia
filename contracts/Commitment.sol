@@ -1,17 +1,9 @@
 pragma solidity >=0.4.25 <0.6.0;
 
 import {CredentialGeneration} from './CredentialGeneration.sol';
+import {IPFS} from './IPFS.sol';
 
 contract Commitment {
-  // TODO: move to library
-  // stores IPFS hashes
-  // see: https://bit.ly/2SbuouC
-  struct Multihash {
-    bytes32 digest;
-    uint8 hashFunction;
-    uint8 size;
-  }
-
   uint256 public openingTime;
   uint256 public closingTime;
 
@@ -19,7 +11,7 @@ contract Commitment {
 
   CredentialGeneration credentialGeneration;
 
-  mapping(address => Multihash) ballots;
+  mapping(address => IPFS.Multihash) ballots;
 
   constructor(
     address cgAddress_,
@@ -58,7 +50,7 @@ contract Commitment {
 
     // every address can only submit one vote
     if (ballots[msg.sender].size == 0) {
-      ballots[msg.sender] = Multihash(_digest, _hashFunction, _size);
+      ballots[msg.sender] = IPFS.Multihash(_digest, _hashFunction, _size);
     }
   }
 

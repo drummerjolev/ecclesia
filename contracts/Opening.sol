@@ -1,23 +1,17 @@
 pragma solidity >=0.4.25 <0.6.0;
 
+import {IPFS} from './IPFS.sol';
+
 // The Opening phase allows voters to submit IPFS hashes to their revealed votes
 // There is no tallying, as every party can verify the hashes and compute the tally
 contract Opening {
-  // TODO: move to library
-  // stores IPFS hashes
-  // see: https://bit.ly/2SbuouC
-  struct Multihash {
-    bytes32 digest;
-    uint8 hashFunction;
-    uint8 size;
-  }
 
   uint256 public openingTime;
   uint256 public closingTime;
 
   address public electionAuthority;
 
-  mapping(address => Multihash) votes;
+  mapping(address => IPFS.Multihash) votes;
 
   constructor(
     uint256 openingTime_,
@@ -49,7 +43,7 @@ contract Opening {
 
     // every address can only reveal one vote
     if (votes[msg.sender].size == 0) {
-      votes[msg.sender] = Multihash(_digest, _hashFunction, _size);
+      votes[msg.sender] = IPFS.Multihash(_digest, _hashFunction, _size);
     }
   }
 
@@ -67,7 +61,7 @@ contract Opening {
     require(msg.sender == electionAuthority);
 
     if (votes[_dishonestVoter].size == 0) {
-      votes[_dishonestVoter] = Multihash(_digest, _hashFunction, _size);
+      votes[_dishonestVoter] = IPFS.Multihash(_digest, _hashFunction, _size);
     }
   }
 }

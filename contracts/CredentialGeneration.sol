@@ -3,15 +3,6 @@ pragma solidity >=0.4.25 <0.6.0;
 import {RSAAccumulator} from './RSAAccumulator.sol';
 
 contract CredentialGeneration {
-  // TODO: move to library
-  // stores IPFS hashes
-  // see: https://bit.ly/2SbuouC
-  /* struct Multihash {
-    bytes32 digest;
-    uint8 hashFunction;
-    uint8 size;
-  } */
-
   RSAAccumulator public rsaAccumulator;
 
   // TODO: using Oraclize, retrieve Ver. func for Voter
