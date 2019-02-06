@@ -6,17 +6,17 @@ contract CredentialGeneration {
   // TODO: move to library
   // stores IPFS hashes
   // see: https://bit.ly/2SbuouC
-  struct Multihash {
+  /* struct Multihash {
     bytes32 digest;
     uint8 hashFunction;
     uint8 size;
-  }
+  } */
 
   RSAAccumulator public rsaAccumulator;
 
   // TODO: using Oraclize, retrieve Ver. func for Voter
   // TODO: check signature
-  
+
   constructor(
     uint256 openingTime_,
     uint256 closingTime_,
@@ -39,11 +39,19 @@ contract CredentialGeneration {
   // add secret prime to accumulator
   /* function addToAccumulator() {
   ...
+  what should happen here? return accumulator or save it to a list in contract?
+  // IPFS: https://docs.oraclize.it/#ethereum-quick-start-simple-query
   } */
+
+  // getter for accumulator
+  function getAccumulator() public view returns (uint256) {
+    // TODO: return array
+    return 3;
+  }
 
   // getter for accumulator modulus
   function getAccumulatorModulus() public view returns (uint256[8]) {
-    // Different from provided bytes argument in constructor
+    // TODO: Different from provided bytes argument in constructor (8)
     // Provides the number used in the accumulator to check the computation
     // done in the contract.
     return rsaAccumulator.getN();
