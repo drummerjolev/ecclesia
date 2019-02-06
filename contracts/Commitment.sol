@@ -19,7 +19,7 @@ contract Commitment {
 
   CredentialGeneration credentialGeneration;
 
-  mapping(address => Multihash) votes;
+  mapping(address => Multihash) ballots;
 
   constructor(
     address cgAddress_,
@@ -44,7 +44,7 @@ contract Commitment {
     credentialGeneration = CredentialGeneration(cgAddress_);
   }
 
-  // Vote is committed
+  // Ballot is committed
   // the ZK proof of knowledge is NOT implemented
   // Voter submits time-locked vote to IPFS, hash is stored here
   function vote(
@@ -52,12 +52,13 @@ contract Commitment {
     uint8 _hashFunction,
     uint8 _size
   ) public {
+    require(block.timestamp >= openingTime && block.timestamp <= closingTime);
     // Placeholder for ZK proof
     // require(...)
 
     // every address can only submit one vote
-    if (votes[msg.sender].size == 0) {
-      votes[msg.sender] = Multihash(_digest, _hashFunction, _size);
+    if (ballots[msg.sender].size == 0) {
+      ballots[msg.sender] = Multihash(_digest, _hashFunction, _size);
     }
   }
 

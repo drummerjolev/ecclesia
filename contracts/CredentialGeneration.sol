@@ -38,6 +38,7 @@ contract CredentialGeneration {
 
   // add secret prime to accumulator
   /* function addToAccumulator() {
+  require(block.timestamp >= openingTime && block.timestamp <= closingTime)
   ...
   what should happen here? return accumulator or save it to a list in contract?
   // IPFS: https://docs.oraclize.it/#ethereum-quick-start-simple-query
@@ -50,7 +51,7 @@ contract CredentialGeneration {
   }
 
   // getter for accumulator modulus
-  function getAccumulatorModulus() public view returns (uint256[8]) {
+  function getAccumulatorModulus() public view returns (uint256[8] memory) {
     // TODO: Different from provided bytes argument in constructor (8)
     // Provides the number used in the accumulator to check the computation
     // done in the contract.
