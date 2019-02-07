@@ -12,6 +12,7 @@
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
     "babel-cli": "^6.26.0",
+    "truffle-contract": "^4.0.4",
     "web3": "^1.0.0-beta.43"
   },
   "devDependencies": {
