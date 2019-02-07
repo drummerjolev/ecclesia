@@ -65,3 +65,12 @@ blockchain/history
 .tern-port
 yarn.lock
 package-lock.json
+
+# oclif
+*-debug.log
+*-error.log
+/.nyc_output
+/dist
+/package-lock.json
+/tmp
+node_modules
