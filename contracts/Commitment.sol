@@ -2,11 +2,9 @@ pragma solidity >=0.4.25 <0.6.0;
 
 import {CredentialGeneration} from './CredentialGeneration.sol';
 import {IPFS} from './IPFS.sol';
+import {Timed} from './Timed.sol';
 
-contract Commitment {
-  uint256 public openingTime;
-  uint256 public closingTime;
-
+contract Commitment is Timed {
   address public electionAuthority;
 
   CredentialGeneration credentialGeneration;
@@ -17,20 +15,8 @@ contract Commitment {
     address cgAddress_,
     uint256 openingTime_,
     uint256 closingTime_
-  ) public {
-    require(
-      openingTime_ >= block.timestamp,
-      "Opening Time must be in the future."
-    );
-    require(
-      closingTime_ > openingTime_,
-      "Closing Time must be after Opening Time."
-    );
-
+  ) public Timed(openingTime_, closingTime_) {
     electionAuthority = msg.sender;
-
-    openingTime = openingTime_;
-    closingTime = closingTime_;
 
     // initialize to other contract address
     credentialGeneration = CredentialGeneration(cgAddress_);
@@ -44,7 +30,7 @@ contract Commitment {
     uint8 _hashFunction,
     uint8 _size
   ) public {
-    require(block.timestamp >= openingTime && block.timestamp <= closingTime);
+    require(super.isOpen());
     // Placeholder for ZK proof
     // require(...)
 

@@ -1,14 +1,11 @@
 pragma solidity >=0.4.25 <0.6.0;
 
 import {IPFS} from './IPFS.sol';
+import {Timed} from './Timed.sol';
 
 // The Opening phase allows voters to submit IPFS hashes to their revealed votes
 // There is no tallying, as every party can verify the hashes and compute the tally
-contract Opening {
-
-  uint256 public openingTime;
-  uint256 public closingTime;
-
+contract Opening is Timed {
   address public electionAuthority;
 
   mapping(address => IPFS.Multihash) votes;
@@ -16,20 +13,8 @@ contract Opening {
   constructor(
     uint256 openingTime_,
     uint256 closingTime_
-  ) public {
-    require(
-      openingTime_ >= block.timestamp,
-      "Opening Time must be in the future."
-    );
-    require(
-      closingTime_ > openingTime_,
-      "Closing Time must be after Opening Time."
-    );
-
+  ) public Timed(openingTime_, closingTime_) {
     electionAuthority = msg.sender;
-
-    openingTime = openingTime_;
-    closingTime = closingTime_;
   }
 
   // Ballot is committed
@@ -39,7 +24,7 @@ contract Opening {
     uint8 _hashFunction,
     uint8 _size
   ) public {
-    require(block.timestamp >= openingTime && block.timestamp <= closingTime);
+    require(super.isOpen());
 
     // every address can only reveal one vote
     if (votes[msg.sender].size == 0) {
