@@ -8,10 +8,7 @@ class HelloCommand extends Command {
   }
 }
 
-HelloCommand.description = `Describe the command here
-...
-Extra documentation goes here
-`;
+HelloCommand.description = 'Welcome to Ecclesia\'s Voter CLI 📝`';
 
 HelloCommand.flags = {
   name: flags.string({ char: 'n', description: 'name to print' }),
