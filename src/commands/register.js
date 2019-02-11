@@ -1,4 +1,4 @@
-import RegistrationLib from '../../index';
+import Library from '../../index';
 
 const {Command, flags} = require('@oclif/command');
 
@@ -16,15 +16,15 @@ class RegisterCommand extends Command {
     if (!flags.isOpen && !flags.hashFunction && !flags.ellipticCurve) return;
 
     // TODO HACK: hardcoded, pass parameters as user config
-    const ecclesiaLib = await RegistrationLib(
+    const registrationContract = await new Library(
       'localhost',
       '9545',
       '0xbc16f477608b18142d6098bb4eac28828a02297e',
-    );
+    ).connectToRegistration();
 
     if (flags.isOpen) {
       // TODO: wrap with try/catch
-      const open = await ecclesiaLib.isOpen();
+      const open = await registrationContract.isOpen();
       if (!!open) {
         this.log(
           `🎉  The registration phase is open. Proceed to the EA to submit your
@@ -37,13 +37,13 @@ class RegisterCommand extends Command {
 
     if (flags.hashFunction) {
       // TODO: wrap with try/catch
-      const hashF = await ecclesiaLib.getHashFunction();
+      const hashF = await registrationContract.getHashFunction();
       this.log(`The Hash Function for signing messages is ${hashF}.`);
     }
 
     if (flags.ellipticCurve) {
       // TODO: wrap with try/catch
-      const curve = await ecclesiaLib.getEllipticCurve();
+      const curve = await registrationContract.getEllipticCurve();
       this.log(`The Elliptic Curve for signing messages is ${curve}.`);
     }
   }
