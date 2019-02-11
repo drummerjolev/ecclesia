@@ -9,15 +9,14 @@ class HelloCommand extends Command {
     // const name = flags.name || 'world';
     // this.log(`hello ${name} from ./src/commands/hello.js`);
 
-    // TODO: hardcoded, pass parameters
-    // hack, hardcoded
+    // TODO HACK: hardcoded, pass parameters
     const ecclesiaLib = await Lib(
       'localhost',
       '9545',
       '0xbc16f477608b18142d6098bb4eac28828a02297e',
     );
-    // TODO: async, how to properly init ecclesiaLib?
-    ecclesiaLib.isOpen();
+
+    const e = await ecclesiaLib.isOpen();
   }
 }
 
