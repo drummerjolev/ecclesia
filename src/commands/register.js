@@ -1,4 +1,4 @@
-import { default as Lib } from '../../index';
+import RegistrationLib from '../../index';
 
 const {Command, flags} = require('@oclif/command');
 
@@ -16,7 +16,7 @@ class RegisterCommand extends Command {
     if (!flags.isOpen && !flags.hashFunction && !flags.ellipticCurve) return;
 
     // TODO HACK: hardcoded, pass parameters as user config
-    const ecclesiaLib = await Lib(
+    const ecclesiaLib = await RegistrationLib(
       'localhost',
       '9545',
       '0xbc16f477608b18142d6098bb4eac28828a02297e',

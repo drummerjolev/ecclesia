@@ -1,13 +1,15 @@
 import { default as Web3 } from 'web3';
-import { default as EcclesiaLib } from './lib/ecclesia';
+import Registration from './lib/registration';
 
-const contractJson = require('./build/contracts/Registration.json');
+const registrationJson = require('./build/contracts/Registration.json');
 
-export default function (host, port, registrationAddress) {
+const RegistrationLib = (host, port, registrationAddress) => {
   const provider = new Web3.providers.HttpProvider(`http://${host}:${port}`);
-  return new EcclesiaLib(
+  return new Registration(
     provider,
-    contractJson,
+    registrationJson,
     registrationAddress,
   );
-}
+};
+
+export default RegistrationLib;
