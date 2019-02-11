@@ -2,11 +2,14 @@ import { default as Web3 } from 'web3';
 import Registration from './lib/registration';
 import CredentialGeneration from './lib/credentialGeneration';
 
+// ABI imports, compiled with `truffle build`
 const registrationJson = require('./build/contracts/Registration.json');
 const credentialGenerationJson = require(
   './build/contracts/CredentialGeneration.json',
 );
 
+// Library serves as initializer for all libs that interact with contracts
+// wraps singleton http provider and web3 objects
 export default class Library {
   constructor(host, port, fromAddress) {
     this.httpProvider = new Web3.providers.HttpProvider(
