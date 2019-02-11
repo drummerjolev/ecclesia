@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.13.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -48,7 +49,7 @@
   },
   "repository": "drummerjolev/ecclesia",
   "scripts": {
-    "ecclesia": "babel-node ./lib/ecclesia.js",
+    "ecclesia": "babel-node --trace-warnings ./bin/run",
     "lint": "eslint ./",
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint .",
