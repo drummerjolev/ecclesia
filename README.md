@@ -5,6 +5,7 @@
 This repository contains code that implements the E-cclesia anonymous voting protocol.
 
 **Instructions**:
+
 Prerequisites: [Node](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/en/)
 
 1. `cd` into this repo then install dependencies with `yarn install`
