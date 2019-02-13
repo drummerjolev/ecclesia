@@ -42,6 +42,7 @@ contract CredentialGeneration is Timed {
     }
 
   // getter for accumulator
+  // TODO: this should probably be secret, depending on the assumption
   function getAccumulator() public view returns (uint256[8] memory) {
     return accumulator;
   }

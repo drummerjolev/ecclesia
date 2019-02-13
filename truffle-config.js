@@ -24,6 +24,12 @@
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 
+// required for binding to Node and compiling on-the-fly
+// require('babel-register')({
+//   ignore: /node_modules\/(?!openzeppelin-solidity\/test\/helpers)/
+// })
+// require('babel-polyfill')
+
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
