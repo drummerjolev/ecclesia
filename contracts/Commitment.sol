@@ -42,7 +42,7 @@ contract Commitment is Timed {
 
   // getter for accumulator
   // TODO: remove? contract addresses stored on client
-  function getAccumulator() public view returns (uint256) {
+  function getAccumulator() public view returns (uint256[8] memory) {
     return credentialGeneration.getAccumulator();
   }
 }

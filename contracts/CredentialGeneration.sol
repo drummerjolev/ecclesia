@@ -4,38 +4,52 @@ import {RSAAccumulator} from './RSAAccumulator.sol';
 import {Timed} from './Timed.sol';
 
 contract CredentialGeneration is Timed {
-  RSAAccumulator public rsaAccumulator;
+  RSAAccumulator public accumulatorContract;
 
-  // TODO: using Oraclize, retrieve Ver. func for Voter
-  // TODO: check signature
+  uint256[8] public accumulator;
 
   constructor(
     uint256 openingTime_,
     uint256 closingTime_,
+    uint256[8] memory accumulator_,
     bytes memory accumulatorModulus_
   ) public Timed(openingTime_, closingTime_) {
-    rsaAccumulator = new RSAAccumulator(accumulatorModulus_);
+    accumulatorContract = new RSAAccumulator(accumulatorModulus_);
+    accumulator = accumulator_;
   }
 
   // add secret prime to accumulator
-  /* function addToAccumulator() {
-  require(super.isOpen())
-  ...
-  what should happen here? return accumulator or save it to a list in contract?
-  // IPFS: https://docs.oraclize.it/#ethereum-quick-start-simple-query
-  } */
+  // there is no limit to how many credential can be submitted by the same voter
+  // at the reveal stage, only the first revealed vote will count
+  function addToAccumulator(
+    // TODO: we assume this is a valid prime, ideally generate prime in contract
+    // credential must be <= 256 bits
+    uint256 credential,
+    bytes32 signedCredential,
+    uint8 v,
+    bytes32 r,
+    bytes32 s
+    ) public {
+      require(super.isOpen(), "Phase closed.");
+
+      // retrieve the signer's Ethereum address, check if it is the voter
+      address signerAddress = ecrecover(signedCredential, v, r, s);
+      require(signerAddress == msg.sender, "Illegal signature.");
+
+      // update accumulator
+      accumulator = accumulatorContract
+        .updateAccumulator(accumulator, credential);
+    }
 
   // getter for accumulator
-  function getAccumulator() public view returns (uint256) {
-    // TODO: return array
-    return 3;
+  function getAccumulator() public view returns (uint256[8] memory) {
+    return accumulator;
   }
 
   // getter for accumulator modulus
   function getAccumulatorModulus() public view returns (uint256[8] memory) {
-    // TODO: Different from provided bytes argument in constructor (8)
     // Provides the number used in the accumulator to check the computation
     // done in the contract.
-    return rsaAccumulator.getN();
+    return accumulatorContract.getN();
   }
 }

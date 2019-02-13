@@ -20,11 +20,6 @@ contract RSAAccumulator {
     PrimeTester public primeTester;
     event AccumulatorUpdated(uint256 indexed _coinID);
 
-    // constructor(uint256[NlengthIn32ByteLimbs] modulus) public {
-    //     accumulator[NlengthIn32ByteLimbs - 1] = g;
-    //     N = modulus;
-    // }
-
     constructor(bytes memory modulus) public {
         require(modulus.length == NlengthInBytes, "Modulus should be at least padded");
         uint256 limb = 0;
@@ -53,65 +48,12 @@ contract RSAAccumulator {
         newAccumulator = modularExpVariableLength(previousAccumulator, _limbs, N);
     }
 
-    // function mapCoinToPrime(uint256 _id) public
-    // view
-    // returns (uint256 prime) {
-    //     // Sony's way to determine randomness :)
-    //     return 11;
-    // }
-
-    // function mapHashToPrime(bytes32 _hash) public
-    // view
-    // returns (uint256 prime) {
-    //     // Another Sony's way to determine randomness :)
-    //     return 17;
-    // }
-
     function getN()
     public
     view
     returns (uint256[NlengthIn32ByteLimbs] memory n) {
         return N;
     }
-
-
-    // // this is kind of Wesolowski scheme. 'x' parameter is some exponent to show that
-    // // where g is an old accumulator (before inclusion of some coin), A is a final accumulator.
-    // // A proof should be just 'r' and 'b', cause 'z' in this scheme is a new accumulator itself
-    // function calculateProofWes(uint256 _coinID, uint256 x)
-    // public
-    // view
-    // returns (uint256[NlengthIn32ByteLimbs] b, uint256[NlengthIn32ByteLimbs] z, uint256 r) {
-    //     uint256[NlengthIn32ByteLimbs] memory nReadOnce = N;
-    //     uint256[NlengthIn32ByteLimbs] memory h = modularExp(emptyAccumulator, mapCoinToPrime(_coinID), nReadOnce);
-    //     z = modularExp(h, x, nReadOnce);
-    //     uint256 B = mapHashToPrime(keccak256(abi.encodePacked(h, z)));
-    //     uint256 exp = x / B;
-    //     b = modularExp(h, exp, nReadOnce);
-    //     r = x % B;
-    // }
-
-    // // vefity proof is Wesolowski scheme. Modular multiplication is not yet implemented, so proof can not be checked
-    // function checkProofWes(
-    //     uint256 _coinID,
-    //     uint256[NlengthIn32ByteLimbs] b,
-    //     uint256[NlengthIn32ByteLimbs] z,
-    //     uint256 r)
-    // public
-    // view
-    // returns (bool isValid) {
-    //     uint256[NlengthIn32ByteLimbs] memory nReadOnce = N;
-    //     uint256[NlengthIn32ByteLimbs] memory h = modularExp(emptyAccumulator, mapCoinToPrime(_coinID), nReadOnce);
-    //     uint256 B = mapHashToPrime(keccak256(abi.encodePacked(h, z))); // no mod N due to size difference
-    //     uint256[NlengthIn32ByteLimbs] memory b_B = modularExp(b, B, nReadOnce);
-    //     uint256[NlengthIn32ByteLimbs] memory h_R = modularExp(h, r, nReadOnce);
-    //     uint256[NlengthIn32ByteLimbs] memory lhs = modularMul4(b_B, h_R, nReadOnce);
-    //     uint256[NlengthIn32ByteLimbs] memory rhs = modularMulBy4(z, nReadOnce);
-    //     if (compare(lhs, rhs) != 0) {
-    //         return false;
-    //     }
-    //     return true;
-    // }
 
     // check that (g^w)^x = A
     // assume that all primes are valid, etc
