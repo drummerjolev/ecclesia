@@ -52,7 +52,7 @@
   },
   "repository": "drummerjolev/ecclesia",
   "scripts": {
-    "prep-migrate": "babel ./utils --out-dir ./migrations/utils",
+    "prep-migrate": "babel ./utils --out-dir ./migrations/gen/utils",
     "ecclesia": "babel-node --trace-warnings ./bin/run",
     "lint": "eslint ./",
     "postpack": "rm -f oclif.manifest.json",
