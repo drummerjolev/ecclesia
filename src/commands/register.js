@@ -20,6 +20,8 @@ class RegisterCommand extends Command {
       'localhost',
       '9545',
       '0xbc16f477608b18142d6098bb4eac28828a02297e',
+      // TODO: private key is a very unsafe HACK, remove this
+      '6e6217fd90137eaaa253816ff040ff4ff03638de55b6d5451a2a54fed3018960',
     ).connectToRegistration();
 
     if (flags.isOpen) {

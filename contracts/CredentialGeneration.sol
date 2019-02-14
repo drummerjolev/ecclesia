@@ -29,20 +29,18 @@ contract CredentialGeneration is Timed {
     uint8 v,
     bytes32 r,
     bytes32 s
-    ) public {
+    ) public view returns (uint256[8] memory) {
       require(super.isOpen(), "Phase closed.");
 
       // retrieve the signer's Ethereum address, check if it is the voter
       address signerAddress = ecrecover(signedCredential, v, r, s);
       require(signerAddress == msg.sender, "Illegal signature.");
 
-      // update accumulator
-      accumulator = accumulatorContract
-        .updateAccumulator(accumulator, credential);
+      // return updated accumulator
+      return accumulatorContract.updateAccumulator(accumulator, credential);
     }
 
   // getter for accumulator
-  // TODO: this should probably be secret, depending on the assumption
   function getAccumulator() public view returns (uint256[8] memory) {
     return accumulator;
   }
