@@ -51,6 +51,6 @@ class RegisterCommand extends Command {
   }
 }
 
-RegisterCommand.description = 'Registration Phase';
+RegisterCommand.description = '(1) Registration Phase';
 
 module.exports = RegisterCommand;

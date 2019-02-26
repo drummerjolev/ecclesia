@@ -47,6 +47,6 @@ class GenerateCredentialCommand extends Command {
   }
 }
 
-GenerateCredentialCommand.description = '';
+GenerateCredentialCommand.description = '(2) Credential Generation Phase.';
 
 module.exports = GenerateCredentialCommand;
