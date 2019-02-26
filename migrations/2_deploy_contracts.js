@@ -9,8 +9,10 @@ const accumulatorUtils = require("./gen/utils/accumulator");
 const Ecclesia = artifacts.require("./Ecclesia.sol");
 const Registration = artifacts.require("./Registration.sol");
 const CredentialGeneration = artifacts.require("./CredentialGeneration.sol");
+const Commitment = artifacts.require("./Commitment.sol");
 
 // Deployment Arguments
+// Registration
 const currentTime = parseInt((new Date().getTime() / 1000).toFixed(0));
 const RegistrationArgs = [
 	currentTime + 10,
@@ -19,6 +21,7 @@ const RegistrationArgs = [
 	"SHA1"
 ];
 
+// Credential Generation
 // UNSAFE accumulator
 const bn = new BN(crypto.randomBytes(256), "16", "be");
 const accumulator = accumulatorUtils.bnToAccumulator(bn, 8);
@@ -27,13 +30,20 @@ const modulus = "0xb2f5fd3f9f0917112ce42f8bf87ed676e15258be443f36deafb0b69bde249
 
 const CredentialGenerationArgs = [
 	currentTime + 14,
-	currentTime + 100000,
+	currentTime + 18,
 	accumulator,
 	modulus,
+];
+
+// Commitment
+const CommitmentArgs = [
+	currentTime + 19,
+	currentTime + 10000,
 ];
 
 module.exports = (deployer, network, accounts) => {
 	deployer.deploy(Ecclesia);
 	deployer.deploy(Registration, ...RegistrationArgs);
 	deployer.deploy(CredentialGeneration, ...CredentialGenerationArgs);
+	deployer.deploy(Commitment, ...CommitmentArgs);
 };
