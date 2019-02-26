@@ -1,4 +1,4 @@
-import { default as Web3 } from 'web3';
+import Web3 from 'web3';
 import Registration from './lib/registration';
 import CredentialGeneration from './lib/credentialGeneration';
 
