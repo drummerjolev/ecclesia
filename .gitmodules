@@ -1,0 +1,3 @@
+[submodule "timelock"]
+	path = timelock
+	url = https://github.com/drummerjolev/time-lock-puzzle
