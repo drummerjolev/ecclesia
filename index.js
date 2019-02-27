@@ -1,6 +1,8 @@
 import Web3 from 'web3';
-import Registration from './lib/registration';
-import CredentialGeneration from './lib/credentialGeneration';
+import IPFS from 'ipfs';
+import CredentialGeneration from './lib/contracts/credentialGeneration';
+import Registration from './lib/contracts/registration';
+import Storage from './lib/storage';
 
 // ABI imports, compiled with `truffle build`
 const registrationJson = require('./build/contracts/Registration.json');
@@ -10,7 +12,7 @@ const credentialGenerationJson = require(
 
 // Library serves as initializer for all libs that interact with contracts
 // wraps singleton http provider and web3 objects
-export default class Library {
+export class ContractLibrary {
   constructor(host, port, fromAddress, privateKey) {
     this.httpProvider = new Web3.providers.HttpProvider(
       `http://${host}:${port}`,
@@ -38,5 +40,17 @@ export default class Library {
       this.fromAddress,
       this.privateKey,
     );
+  }
+}
+
+// StorageLibrary serves as initializer for the IPFS Library
+// wraps singleton IPFS node
+export class StorageLibrary {
+  constructor() {
+    this.node = new IPFS();
+  }
+
+  connectToStorage() {
+    return new Storage(this.node);
   }
 }

@@ -1,4 +1,4 @@
-import Library from '../../index';
+import { ContractLibrary } from '../../index';
 
 const {Command, flags} = require('@oclif/command');
 
@@ -17,7 +17,7 @@ class GenerateCredentialCommand extends Command {
 
     // TODO HACK: hardcoded, pass parameters as user config
     // cf: https://oclif.io/docs/base_class
-    const credGenContract = await new Library(
+    const credGenContract = await new ContractLibrary(
       'localhost',
       '9545',
       '0xBc16F477608b18142d6098bB4EaC28828A02297e',
