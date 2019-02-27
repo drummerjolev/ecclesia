@@ -3,10 +3,12 @@ import { ContractLibrary, StorageLibrary } from '../../index';
 import { getPathTo } from '../../utils/app';
 
 const {Command, flags} = require('@oclif/command');
+import cli from 'cli-ux';
 
 class CommitCommand extends Command {
   static flags = {
     // TODO: provide descriptions
+    vote: flags.boolean({char: 'v'}),
   };
 
   // promisifies time lock
@@ -31,21 +33,48 @@ class CommitCommand extends Command {
   async run() {
     const { flags } = this.parse(CommitCommand);
 
-    try {
-      // // TODO: get as input
-      // // TODO: time + squarings per second should be set by EA
-      // const res = await this.encrypt(3, 76000, 'vote for Jonathan');
-      // if (res.length === 1) {
-      //   const [p, q, n, a, t, enc_key, enc_vote, key] = res[0].split(' ');
-      //   // TODO: Save to local storage. Commit enc_key, enc_vote.
-      //   // TODO: implement IPFS
-      // }
+    if (flags.vote) {
+      // records choice
+      // TODO: improve this to use multiple choice?
+      const choice = await cli.prompt('Who do you want to vote for?');
+      let instance;
 
-      const instance = await new StorageLibrary().connectToStorage();
-      this.log(instance);
-    } catch (e) {
-      this.log(e);
+      try {
+        this.log(`Locking your vote...`);
+
+        // TODO: time + squarings per second should be set by EA
+        const res = await this.encrypt(3, 76000, choice);
+        if (res.length !== 1) {
+          throw `incorrect return value with length ${res.length}`;
+        }
+        const [p, q, n, a, t, enc_key, enc_vote, key] = res[0].split(' ');
+        this.log('🔒  Your vote was successfully locked until the end of the voting period.');
+
+        // TODO: Save all values to local storage for phase 4
+        // we assume the order of this tuple is given
+        const valuesToCommit = [enc_key, enc_vote].join(' ');
+
+        this.log(`Storing your locked vote on IPFS...`);
+        // store on IPFS
+        instance = await new StorageLibrary().connectToStorage();
+        const writtenValues = await instance.write('vote', valuesToCommit);
+        const retrievedValues = await instance.read(writtenValues.hash);
+        if (valuesToCommit !== retrievedValues) {
+          throw `vote could not be stored on IPFS`;
+        }
+
+        // TODO: add save to contract
+
+        this.log(`🎉  Success! You have successfully completed this phase.`);
+      } catch (e) {
+        // TODO: better error handling
+        this.log(e);
+      }
+
+      // unblock CLI by stopping IPFS instance, no matter what the outcome
+      if (instance) await instance.stop();
     }
+
   }
 }
 
