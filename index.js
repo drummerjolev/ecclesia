@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import IPFS from 'ipfs';
 import CredentialGeneration from './lib/contracts/credentialGeneration';
+import Commitment from './lib/contracts/commitment';
 import Registration from './lib/contracts/registration';
 import Storage from './lib/storage';
 
@@ -9,6 +10,7 @@ const registrationJson = require('./build/contracts/Registration.json');
 const credentialGenerationJson = require(
   './build/contracts/CredentialGeneration.json',
 );
+const commitmentJson = require('./build/contracts/Commitment.json');
 
 // Library serves as initializer for all libs that interact with contracts
 // wraps singleton http provider and web3 objects
@@ -37,6 +39,16 @@ export class ContractLibrary {
       this.httpProvider,
       this.web3,
       credentialGenerationJson,
+      this.fromAddress,
+      this.privateKey,
+    );
+  }
+
+  connectToCommitment() {
+    return new Commitment(
+      this.httpProvider,
+      this.web3,
+      commitmentJson,
       this.fromAddress,
       this.privateKey,
     );
