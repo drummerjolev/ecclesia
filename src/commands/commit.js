@@ -1,6 +1,4 @@
-import { PythonShell } from 'python-shell';
-import { ContractLibrary, StorageLibrary } from '../../index';
-import { getPathTo } from '../../utils/app';
+import { ContractLibrary, StorageLibrary, PythonLibrary } from '../../index';
 
 const {Command, flags} = require('@oclif/command');
 import cli from 'cli-ux';
@@ -12,25 +10,6 @@ class CommitCommand extends Command {
     vote: flags.boolean({char: 'v'}),
   };
 
-  // promisifies time lock
-  encrypt(time, squaringsPerSecond, vote) {
-    // HACK: pass in config
-    const pythonPath = '/Users/drummerjolev/.virtualenvs/ug4-time-lock/bin/python';
-    const scriptPath = getPathTo('timelock/timelockpuzzle');
-    return new Promise((done, reject) =>
-      PythonShell.run(
-        'encrypt.py',
-        {
-          mode: 'text',
-          args: [...arguments],
-          pythonPath,
-          scriptPath,
-        },
-        (err, results) => (err ? reject(err) : done(results))
-      )
-    );
-  }
-
   // procedure for vote boolean flag -v
   async runVote(contract) {
     // records choice
@@ -40,8 +19,13 @@ class CommitCommand extends Command {
     try {
       // Time Lock
       cli.action.start(`🔒  Locking your vote`);
+      const pythonLibrary = new PythonLibrary(
+        // HACK: pass in config
+        '/Users/drummerjolev/.virtualenvs/ug4-time-lock/bin/python',
+        'timelock/timelockpuzzle',
+      ).connectToPython();
       // TODO: time + squarings per second should be set by EA
-      const res = await this.encrypt(3, 76000, choice);
+      const res = await pythonLibrary.encrypt(3, 76000, choice);
       if (res.length !== 1) {
         throw `incorrect return value with length ${res.length}`;
       }

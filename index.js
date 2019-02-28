@@ -3,6 +3,7 @@ import IPFS from 'ipfs';
 import CredentialGeneration from './lib/contracts/credentialGeneration';
 import Commitment from './lib/contracts/commitment';
 import Registration from './lib/contracts/registration';
+import Python from './lib/python';
 import Storage from './lib/storage';
 
 // ABI imports, compiled with `truffle build`
@@ -64,5 +65,20 @@ export class StorageLibrary {
 
   connectToStorage() {
     return new Storage(this.node);
+  }
+}
+
+// PythonLibrary serves as initializer for the Python Library
+// wraps the Python path, e.g. a path to a virtual environment
+export class PythonLibrary {
+  // pythonPath arg is provided as absolute
+  // script arg is provided as relative to Ecclesia directory
+  constructor(pythonPath, script) {
+    this.pythonPath = pythonPath;
+    this.script = script;
+  }
+
+  connectToPython() {
+    return new Python(this.pythonPath, this.script);
   }
 }
