@@ -47,7 +47,7 @@ class CommitCommand extends Command {
       cli.action.stop()
 
       // store IPFS hash on contract
-      cli.action.start('📨  Submitting vote to EA')
+      cli.action.start('📨  Submitting vote to contract');
       const submitVote = await contract.vote(writtenValues.hash);
       cli.action.stop()
       this.log(`🎉  Success! You have successfully voted.`);
